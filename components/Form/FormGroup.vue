@@ -1,18 +1,24 @@
 <template>
-  <div class="form-group">
-    <label class="" :for="label">{{ label }}</label>
+  <div :class="{error: errorForm}" class="form-group">
+    <label :class="{required: !isTextarea}" :for="label"> <span>{{ label }}</span> </label>
 
     <textarea
       v-if="isTextarea"
       :id="label"
       :placeholder="placeholder"
       :value="val"
-      cols="30"
       rows="5"
       @input="$emit('update:val', $event.target.value)"
     />
 
-    <input v-else :id="label" :value="val" :placeholder="placeholder" @input="$emit(`update:val`, $event.target.value)">
+    <input
+      v-else
+      :id="label"
+      :type="type"
+      :value="val"
+      :placeholder="placeholder"
+      @input="$emit(`update:val`, $event.target.value)"
+    >
   </div>
 </template>
 <script>
@@ -30,9 +36,22 @@ export default {
       type: String,
       default: ''
     },
+    type: {
+      type: String,
+      default: 'text'
+    },
     isTextarea: {
       type: Boolean,
       default: false
+    },
+    error: {
+      type: Boolean,
+      default: false
+    }
+  },
+  computed: {
+    errorForm () {
+      return !this.val && this.error
     }
   }
 }
@@ -40,13 +59,44 @@ export default {
 <style lang="scss">
 .form-group {
   margin-bottom: 16px;
+    position: relative;
   display: flex;
   flex-direction: column;
+
+  &.error{
+    &::before{
+      content: 'Поле является обязательным';
+      color: #FF8484;
+      font-size: 8px;
+      width: 100%;
+      position: absolute;
+      left: 0;
+      bottom: -14px;
+    }
+    & input{
+      border: 1px solid #FF8484;
+    }
+  }
 
   & label {
     font-size: 10px;
     color: #49485E;
     margin-bottom: 4px;
+
+    &.required span {
+      position: relative;
+
+      &::before {
+        content: '';
+        width: 4px;
+        height: 4px;
+        position: absolute;
+        background: #FF8484;
+        border-radius: 4px;
+        right: -5px;
+        top: 0px;
+      }
+    }
   }
 
   & input,

@@ -1,10 +1,15 @@
 <template>
-  <div class="form-add-product">
+  <div :class="{ success: success }" class="form-add-product">
     <h1 class="title">
       Добавление товара
     </h1>
     <form class="form-add-product__form">
-      <FormGroup :val.sync="nameProduct" label="Наименование товара" placeholder="Введите наименование товара" />
+      <FormGroup
+        :error="error"
+        :val.sync="nameProduct"
+        label="Наименование товара"
+        placeholder="Введите наименование товара"
+      />
 
       <FormGroup
         :val.sync="description"
@@ -13,11 +18,12 @@
         placeholder="Введите описание товара"
       />
 
-      <FormGroup :val.sync="linkImg" label="Ссылка на изображение товара" placeholder="Введите ссылку" />
+      <FormGroup :error="error" :val.sync="linkImg" label="Ссылка на изображение товара" placeholder="Введите ссылку" />
 
-      <FormGroup :val.sync="price" label="Цена товара" type="number" placeholder="Введите цену" />
-      <button :disabled="btnActive" class="form-add-product__btn">
-        Добавить товар
+      <FormGroup :error="error" :val.sync="price" label="Цена товара" type="number" placeholder="Введите цену" />
+
+      <button :class="{ disabled: btnActive }" class="form-add-product__btn" @click.prevent="addProduct">
+        {{ success ? 'Успешно довален' : 'Добавить товар' }}
       </button>
     </form>
   </div>
@@ -32,12 +38,37 @@ export default {
       nameProduct: '',
       description: '',
       linkImg: '',
-      price: ''
+      price: '',
+      success: false,
+      error: false
     }
   },
   computed: {
     btnActive () {
       return !(this.nameProduct && this.linkImg && this.price)
+    }
+  },
+  methods: {
+    addProduct () {
+      if (!this.btnActive) {
+        this.error = false
+
+        this.$store.commit('products/ADD_PRODUCT', {
+          id: new Date().valueOf(),
+          nameProduct: this.nameProduct,
+          linkImg: this.linkImg,
+          price: +this.price,
+          description: this.description
+        })
+
+        this.success = true
+        setTimeout(() => {
+          this.success = false
+          this.description = this.price = this.linkImg = this.nameProduct = ''
+        }, 2000)
+      } else {
+        this.error = true
+      }
     }
   }
 }
@@ -79,7 +110,13 @@ export default {
     color: #fff;
     transition: all 0.3s;
 
-    &:disabled {
+    .success & {
+    color: #7bae73;
+    background: #fff;
+    box-shadow: 0px 2px 14px 7px rgb(157 255 0 / 20%);
+    }
+
+    &.disabled {
       color: #b4b4b4;
       background: #eeeeee;
     }

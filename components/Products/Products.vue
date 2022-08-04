@@ -1,10 +1,11 @@
 <template>
   <div class="products">
+    <div class="products__filter" />
     <div class="products__cards">
       <ProductCard
         v-for="product in getProducts"
         :key="product.id"
-        :name="product.name"
+        :name="product.nameProduct"
         :description="product.description"
         :price="product.price"
         :link-img="product.linkImg"

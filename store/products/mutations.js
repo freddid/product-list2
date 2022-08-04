@@ -1,5 +1,5 @@
 export default {
-  // SET_PROJECT (state, payload) {
-  //   state.project = payload
-  // }
+  ADD_PRODUCT (state, payload) {
+    state.products.push(payload)
+  }
 }
