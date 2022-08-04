@@ -65,7 +65,7 @@ export default {
         setTimeout(() => {
           this.success = false
           this.description = this.price = this.linkImg = this.nameProduct = ''
-        }, 2000)
+        }, 1000)
       } else {
         this.error = true
       }
@@ -73,7 +73,7 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .form-add-product {
   @media (min-width: 767px) {
     position: fixed;
@@ -100,6 +100,7 @@ export default {
     border-radius: 10px;
     text-align: center;
     padding: 10px 0;
+    cursor: pointer;
     border: none;
     font-weight: 600;
     font-size: 12px;
@@ -110,10 +111,14 @@ export default {
     color: #fff;
     transition: all 0.3s;
 
+    &:hover {
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, .6);
+    }
+
     .success & {
-    color: #7bae73;
-    background: #fff;
-    box-shadow: 0px 2px 14px 7px rgb(157 255 0 / 20%);
+      color: #7bae73;
+      background: #fff;
+      box-shadow: 0px 2px 14px 7px rgb(157 255 0 / 20%);
     }
 
     &.disabled {

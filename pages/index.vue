@@ -4,9 +4,8 @@
       <div class="page-products__form">
         <FormAddProduct />
       </div>
-
       <div class="page-products__products">
-        <Products />
+        <Products v-if="showProloader" />
       </div>
     </div>
   </div>
@@ -17,14 +16,39 @@ import FormAddProduct from '~/components/Form/FormAddProduct.vue'
 import Products from '~/components/Products/Products.vue'
 export default {
   name: 'IndexPage',
-  components: { FormAddProduct, Products }
+  components: { FormAddProduct, Products },
+  data () {
+    return {
+      showProloader: false
+    }
+  },
+  watch: {
+    '$store.state.products.products' () {
+      localStorage.setItem('products', JSON.stringify(this.$store.state.products.products))
+    }
+  },
+  mounted () {
+    this.$nextTick(() => {
+      this.$nuxt.$loading.start()
+
+      setTimeout(() => {
+        this.$nuxt.$loading.finish()
+        this.showProloader = true
+      }, 1000)
+    })
+
+    if (localStorage.getItem('products')) {
+      this.$store.commit('products/ADD_PRODUCTS', JSON.parse(localStorage.getItem('products')))
+    }
+  }
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .page-products {
   background: rgba(255, 254, 251, 0.8);
   padding: 32px;
+
   @media (max-width: 480px) {
     padding: 15px;
   }
@@ -50,9 +74,11 @@ export default {
 
   &__form {
     min-width: 332px;
+
     @media (max-width: 767px) {
       margin-bottom: 16px;
     }
+
     @media (max-width: 480px) {
       min-width: auto;
     }

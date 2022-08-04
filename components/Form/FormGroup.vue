@@ -1,6 +1,6 @@
 <template>
-  <div :class="{error: errorForm}" class="form-group">
-    <label :class="{required: !isTextarea}" :for="label"> <span>{{ label }}</span> </label>
+  <div :class="{ error: errorForm }" class="form-group">
+    <label :class="{ required: !isTextarea }" :for="label"> <span>{{ label }}</span> </label>
 
     <textarea
       v-if="isTextarea"
@@ -56,15 +56,15 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .form-group {
   margin-bottom: 16px;
-    position: relative;
+  position: relative;
   display: flex;
   flex-direction: column;
 
-  &.error{
-    &::before{
+  &.error {
+    &::before {
       content: 'Поле является обязательным';
       color: #FF8484;
       font-size: 8px;
@@ -73,7 +73,8 @@ export default {
       left: 0;
       bottom: -14px;
     }
-    & input{
+
+    & input {
       border: 1px solid #FF8484;
     }
   }
@@ -107,6 +108,11 @@ export default {
     border: none;
     padding: 10px 16px;
     outline: none;
+    transition: all .3s;
+
+    &:hover {
+      box-shadow: 0px 2px 5px rgba(0, 0, 0, .6);
+    }
 
     &::placeholder {
       font-size: 12px;
